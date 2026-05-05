@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Реферат – Илья Ефимович Репин (1844‑1930)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
+          rel="stylesheet">
+
+    <style>
+        /* ────── ПАЛИТРА ────── */
+        :root{
+            --bg:            #f5f5f5;   /* фон страницы */
+            --card-bg:       #ffffff;   /* фон карточек */
+            --text:          #212121;   /* основной текст */
+            --muted:         #666666;   /* вспомогательный текст */
+            --primary:       #00c853;   /* ярко‑зелёный акцент */
+            --primary-dark: #009624;   /* более тёмный акцент */
+            --radius:        8px;
+            --shadow:        0 2px 8px rgba(0,0,0,.1);
+        }
+
+        /* ────── ОБЩИЕ СТИЛИ ────── */
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+        html{scroll-behavior:smooth;}
+        body{
+            font-family:'Montserrat',sans-serif;
+            background:var(--bg);
+            color:var(--text);
+            line-height:1.6;
+            display:flex;
+            flex-direction:column;
+            min-height:100vh;
+        }
+        a{color:inherit;text-decoration:none;}
+        img{max-width:100%;display:block;}
+
+        /* ────── ШАПКА ────── */
+        header{
+            position:sticky;top:0;
+            background:#fff;
+            box-shadow:var(--shadow);
+            padding:1rem 2rem;
+            display:flex;justify-content:space-between;align-items:center;
+            z-index:100;
+        }
+        .logo{
+            font-weight:600;
+            font-size:1.3rem;
+            color:var(--primary);
+        }
+        nav ul{
+            list-style:none;
+            display:flex;
+            gap:1.5rem;
+            font-size:.95rem;
+        }
+        nav a:hover{color:var(--primary);}
+
+        /* ────── ГЕРОЙ ────── */
+        .hero{
+            background:linear-gradient(135deg,#e8f5e9 0%,#fff 70%);
+            padding:4rem 2rem;
+            text-align:center;
+        }
+        .hero h1{font-size:2.8rem;margin-bottom:.6rem;color:var(--primary-dark);}
+        .hero p{
+            font-size:1.1rem;
+            max-width:720px;
+            margin:0 auto 1.8rem;
+            color:var(--muted);
+        }
+
+        /* ────── СЕКЦИИ ────── */
+        .section{
+            max-width:1100px;
+            margin:3rem auto;
+            padding:0 2rem;
+        }
+        .section-title{
+            font-size:2rem;
+            margin-bottom:1.5rem;
+            color:var(--primary-dark);
+            position:relative;
+        }
+        .section-title::after{
+            content:"";
+            position:absolute;
+            left:0;bottom:-4px;
+            width:48px;height:3px;
+            background:var(--primary);
+        }
+        .card{
+            background:var(--card-bg);
+            border-radius:var(--radius);
+            box-shadow:var(--shadow);
+            padding:1.5rem 2rem;
+            margin-bottom:1.5rem;
+        }
+
+        /* ────── ТЕКСТ+ФОТО (media‑blocks) ────── */
+        .media{
+            display:flex;
+            align-items:flex-start;
+            gap:1.5rem;
+            margin-bottom:1.5rem;
+            opacity:0;
+            transform:translateX(30px);
+            transition:opacity .6s ease-out,transform .6s ease-out;
+        }
+        .media:nth-child(even){
+            flex-direction:row-reverse;
+            transform:translateX(-30px);
+        }
+        .media.visible{opacity:1;transform:translateX(0);}
+        .media img{
+            width:280px;
+            flex-shrink:0;
+            border-radius:var(--radius);
+            box-shadow:var(--shadow);
+        }
+        .media .text{flex:1;}
+        @media (max-width:768px){
+            .hero h1{font-size:2.2rem;}
+            .hero p{font-size:1rem;}
+            .media{
+                flex-direction:column;
+                text-align:center;
+            }
+            .media img{
+                margin:0 auto 1rem;
+                width:80%;
+                max-width:300px;
+            }
+        }
+
+        /* ────── ГАЛЕРЕЯ ────── */
+        .carousel{
+            position:relative;
+            max-width:1000px;
+            margin:0 auto 3rem;
+            overflow:hidden;
+            border-radius:var(--radius);
+            box-shadow:var(--shadow);
+        }
+        .slides{
+            display:flex;
+            transition:transform .5s ease;
+        }
+        .slide{
+            min-width:100%;
+            background:var(--bg);
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            position:relative;
+        }
+        .slide img{
+            max-width:100%;
+            max-height:80vh;
+            object-fit:contain;
+        }
+        .caption{
+            position:absolute;
+            left:0;right:0;bottom:0;
+            background:rgba(0,0,0,.5);
+            color:#fff;
+            padding:.5rem 1rem;
+            font-size:.95rem;
+            text-align:center;
+        }
+        .arrow{
+            position:absolute;
+            top:50%;
+            transform:translateY(-50%);
+            width:48px;height:48px;
+            background:rgba(0,0,0,.4);
+            color:#fff;
+            border:none;
+            border-radius:50%;
+            cursor:pointer;
+            font-size:1.8rem;
+            line-height:48px;
+            text-align:center;
+            transition:background .2s;
+            z-index:2;
+        }
+        .arrow:hover{background:rgba(0,0,0,.7);}
+        .arrow-left{left:10px;}
+        .arrow-right{right:10px;}
+        .counter{
+            position:absolute;
+            right:10px;
+            bottom:10px;
+            background:rgba(0,0,0,.5);
+            color:#fff;
+            padding:.2rem .5rem;
+            border-radius:4px;
+            font-size:.85rem;
+            z-index:2;
+        }
+
+        /* ────── ПАНЕЛЬ ИНФОРМАЦИИ (без таблицы) ────── */
+        .info-card{
+            background:var(--card-bg);
+            border-radius:var(--radius);
+            box-shadow:var(--shadow);
+            padding:1rem 1.5rem;
+            margin-top:0.5rem;
+        }
+        .info-card h3{
+            margin:0 0 .4rem;
+            color:var(--primary-dark);
+        }
+        .info-card p{
+            margin:.2rem 0;
+        }
+
+        /* ────── ПОДВАЛ ────── */
+        footer{
+            background:#fff;
+            color:var(--muted);
+            text-align:center;
+            padding:1rem;
+            margin-top:auto;
+            box-shadow:var(--shadow);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ────── Шапка ────── -->
+    <header>
+        <div class="logo">Gercec</div>
+        <nav>
+            <ul>
+                <li><a href="#tema">Тема</a></li>
+                <li><a href="#vvedenie">Введение</a></li>
+                <li><a href="#osnovnaya">Основная часть</a></li>
+                <li><a href="#gallery">Галерея</a></li>
+                <li><a href="#zaklyuchenie">Заключение</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ────── Герой ────── -->
+    <section class="hero">
+        <h1>Илья Ефимович Репин (1844 – 1930)</h1>
+        <p>Крупнейший русский художник‑реалист, чьи картины стали образцом
+           социального и исторического реализма. На странице собраны
+           основные вехи его жизни, творчества и наследия.</p>
+        <!-- Кнопка «Скачать PDF» удалена -->
+    </section>
+
+    <!-- ────── Тема ────── -->
+    <section id="tema" class="section">
+        <h2 class="section-title">Тема реферата</h2>
+        <div class="card">
+            <p><strong>Илья Ефимович Репин (1844 – 1930) — один из самых влиятельных
+               русских художников‑реалистов, символ русского художественного
+               модернизма конца XIX — начала XX вв.</strong></p>
+        </div>
+    </section>
+
+    <!-- ────── Введение ────── -->
+    <section id="vvedenie" class="section">
+        <h2 class="section-title">Введение</h2>
+        <div class="card">
+            <p>Илья Ефимович Репин родился 24 июля [5 августа] 1844 г. в
+               небольшом городе Чугуев Харьковской губернии (тогда Российская империя)
+               и умер 29 сентября 1930 г. в Куоккале (ныне Репино, Финляндия) —
+               месте, где после революции он провёл последние годы своей жизни.</p>
+            <p>С детства Репина привлекала работа с красками: в 1855 г. отправили в
+               школу топографов, но уже в 1857 г. он оставил её, став учеником иконописца
+               И. М. Бунакова в родном городе. В 16 лет он уже работал
+               в кочевой иконописной артели, зарабатывая 25 рублей в месяц.
+               В 1863 г. собрав деньги, он отправился в Петербург,
+               где поступил в Императорскую академию художеств — главный центр художественного
+               обучения в России, и начал своё формальное образование.</p>
+        </div>
+    </section>
+
+    <!-- ────── Основная часть ────── -->
+    <section id="osnovnaya" class="section">
+        <h2 class="section-title">Основная часть</h2>
+
+        <!-- 1. Ранние годы (фото слева) -->
+        <div class="media">
+            <img src="img/Man_iun.jpg" alt="Юный Илья Репин">
+            <div class="text">
+                <h3>Ранние годы и художественное образование</h3>
+                <p>После академических занятий Репин несколько лет работал в жанровой
+                   живописи, совершенствовал навыки в передвижных художественных
+                   экспозициях и присоединился к Товариществу передвижников («Перемещёрок»)
+                   в 1878‑1891 и вновь с 1898 г. . За вклад в искусство
+                   получил академический титул академика (1876 г.), стал профессором (1892)
+                   и проректором академии (1898‑1899) .</p>
+            </div>
+        </div>
+
+        <!-- 2. Карьера (фото справа) -->
+        <div class="media">
+            <img src="img/Man.jpg" alt="Илья Репин — портрет">
+            <div class="text">
+                <h3>Художественная карьера и творчество</h3>
+                <p>Самыми известными работами Репина являются:</p>
+                <ul style="margin-left:1.5rem;">
+                    <li><strong>«Бурлаки на Волге» (1873)</strong> — образец строгого
+                        реализма, впоследствии ставший моделью соцреализма.</li>
+                    <li>«Религиозный процесс в Курской губернии» (1880‑1883).</li>
+                    <li>«Иван Грозный и его сын Иван 16 ноября 1581 г.» (1885).</li>
+                    <li>Эпическая серия «Запорожцы пишут письмо турецкому султану» (1880‑1891).</li>
+                </ul>
+                <p>Репин также известен портретами великих русских личностей:
+                   Лев Толстой, Михаил Глинка, Модест Мусоргский и многих других.</p>
+            </div>
+        </div>
+
+        <!-- 3. Преподавание и последние годы (фото слева) -->
+        <div class="media">
+            <img src="img/Man_ded.jpg" alt="Старый Илья Репин">
+            <div class="text">
+                <h3>Преподавание, мемуары и последние годы</h3>
+                <p>Помимо живописи, Репин преподавал в Высшем художественном училище
+                   (1893‑1907), а в 1898‑99 гг. занимал должность ректора.
+                   После Октябрьской революции 1917 г. он отказался
+                   от возвращения в Советскую Россию и обосновался в имении Пенаты в
+                   Куоккале (тогда независимая Финляндия), где прожил последние
+                   тринадцать лет. В этот период художник сосредоточился
+                   на библейских сюжетах и написал автобиографические мемуары
+                   «Далёкое близкое», описывающие переход от реформ к контрреформам.</p>
+                <p>Творчество Репина охватывало исторические сцены, жанровые картины,
+                   портреты, пейзажи и мемуары. Критики отмечали его способность передать
+                   «пластичность» и «социальную остроту» реальной жизни; Владимир Стасов
+                   назвал его работу «энциклопедией пореформенной России».
+                   Работы Репина находятся в крупнейших музеях мира (Третьяковская
+                   галерея, Русский музей, Смитсоновский институт) и продолжают
+                   влиять на последующие поколения художников, включая советскую
+                   школу соцреализма.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ────── ГАЛЕРЕЯ ────── -->
+    <section id="gallery" class="section">
+        <h2 class="section-title">Галерея работ Ильи Репина</h2>
+
+        <div class="carousel">
+            <!-- стрелки -->
+            <button class="arrow arrow-left" aria-label="Предыдущее изображение">&#10094;</button>
+            <button class="arrow arrow-right" aria-label="Следующее изображение">&#10095;</button>
+
+            <!-- слайды -->
+            <div class="slides">
+                <!-- 1 -->
+                <div class="slide">
+                    <img src="https://lavrus.tretyakov.ru/upload/iblock/07d/07d23ab6ea085fc2004360dbd85dec1b.jpg"
+                         alt="Бурлаки на Волге">
+                    <div class="caption">Бурлаки на Волге</div>
+                </div>
+                <!-- 2 -->
+                <div class="slide">
+                    <img src="https://lavrus.tretyakov.ru/upload/iblock/c97/c975007df06b2d2cfa990249b2ebfe15.jpg"
+                         alt="Садко">
+                    <div class="caption">Садко</div>
+                </div>
+                <!-- 3 -->
+                <div class="slide">
+                    <img src="https://lavrus.tretyakov.ru/upload/iblock/32d/32daea558a1adc0ee9ef4e77764a0347.jpg"
+                         alt="Царевна Софья">
+                    <div class="caption">Царевна Софья</div>
+                </div>
+                <!-- 4 -->
+                <div class="slide">
+                    <img src="https://lavrus.tretyakov.ru/upload/iblock/c66/c66a0259531b5f0c64293a00d70c762d.jpg"
+                         alt="Крестный ход в Курской губернии">
+                    <div class="caption">Крестный ход в Курской губернии</div>
+                </div>
+                <!-- 5 -->
+                <div class="slide">
+                    <img src="https://lavrus.tretyakov.ru/upload/iblock/cba/cba14b93e20237030fcd1a369a3454dd.jpg"
+                         alt="Иван Грозный и сын Иван">
+                    <div class="caption">Иван Грозный и сын Иван</div>
+                </div>
+                <!-- 6 -->
+                <div class="slide">
+                    <img src="https://lavrus.tretyakov.ru/upload/iblock/b9d/b9d56edcec11aec321e19a806c86d013.jpg"
+                         alt="Запорожцы">
+                    <div class="caption">Запорожцы</div>
+                </div>
+                <!-- 7 -->
+                <div class="slide">
+                    <img src="https://lavrus.tretyakov.ru/upload/iblock/4aa/4aa7ac566794d410587d1f7ddaf05226.jpg"
+                         alt="Не ждали">
+                    <div class="caption">Не ждали</div>
+                </div>
+                <!-- 8 -->
+                <div class="slide">
+                    <img src="https://lavrus.tretyakov.ru/upload/iblock/544/544c7ef34e10e79c0bd4f4f10b59d55a.jpg"
+                         alt="Приём волостных старшин императором Александром III">
+                    <div class="caption">Приём волостных старшин императором Александром III</div>
+                </div>
+                <!-- 9 -->
+                <div class="slide">
+                    <img src="https://lavrus.tretyakov.ru/upload/iblock/7d7/7d73c6416a51981a35c7abab5d53922c.jpg"
+                         alt="Торжественное заседание Государственного Совета">
+                    <div class="caption">Торжественное заседание Государственного Совета</div>
+                </div>
+                <!-- 10 -->
+                <div class="slide">
+                    <img src="https://lavrus.tretyakov.ru/upload/iblock/560/560849252ad64d5fe82414a5abf33c2f.jpg"
+                         alt="17 октября 1905 года">
+                    <div class="caption">17 октября 1905 г.</div>
+                </div>
+            </div>
+
+            <!-- индикатор текущего / общего количества -->
+            <div class="counter"><span id="cur">1</span> / <span id="tot">10</span></div>
+        </div>
+
+        <!-- Информация о текущей картине (карточка без таблицы) -->
+        <div id="info-card" class="info-card"></div>
+    </section>
+
+    <!-- ────── Заключение ────── -->
+    <section id="zaklyuchenie" class="section">
+        <h2 class="section-title">Заключение</h2>
+        <div class="card">
+            <p>Илья Ефимович Репин сумел совместить техническое мастерство
+               живописи с глубокой социальной аналитикой, превратив повседневные
+               сцены в мощные исторические свидетельства своего времени.
+               Его искусство остаётся символом русского реализма, а репинский образ
+               живого человека делает его одной из самых узнаваемых фигур в
+               истории мирового искусства.</p>
+        </div>
+    </section>
+
+    <!-- ────── Подвал ────── -->
+    <footer>
+        Михаил Фуркулицэ & ChatGPT.
+    </footer>
+
+    <!-- ────── СКРИПТЫ ────── -->
+    <script>
+        /* ---- Появление media‑блоков ---- */
+        document.addEventListener('DOMContentLoaded', () => {
+            const obs = new IntersectionObserver(
+                entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                },
+                {threshold: 0.2}
+            );
+            document.querySelectorAll('.media').forEach(el => obs.observe(el));
+        });
+
+        /* ---- Информация о картинах (без таблицы) ---- */
+        const paintingsInfo = [
+            {title:"Бурлаки на Волге", year:1873, desc:"Одна из самых известных работ Репина, показывающая тяжёлый труд баржных тружеников на реке Волге и ставшая символом русского реализма."},
+            {title:"Садко", year:1871, desc:"Эпическая картина, основанная на народном предании о музыканте Садко, отважно противостоящем турецкому захватчику."},
+            {title:"Царевна Софья", year:1875, desc:"Портрет молодой дочери царя Алексея Михайловича, демонстрирующий тонкую работу Репина с цветом и светом."},
+            {title:"Крестный ход в Курской губернии", year:"1880‑1883", desc:"Жанровая сцена, изображающая религиозный процесс в провинциальной русской общине и подчёркивающая народную веру."},
+            {title:"Иван Грозный и сын Иван", year:1885, desc:"Драматическое полотно, где отражён конфликт между тираном‑отцом и сыном‑жертвой, символизирующее трагедию русской истории."},
+            {title:"Запорожцы", year:"1880‑1891", desc:"Эпическая серия, иллюстрирующая жизнь запорожских казаков, их отвагу и связь с украинской историей."},
+            {title:"Не ждали", year:1883, desc:"Картина, показывающая женщину, ожидающую возвращения возлюбленного, передающую эмоциональное напряжение момента."},
+            {title:"Приём волостных старшин императором Александром III", year:1885, desc:"Церемониальное событие, демонстрирующее уважение к местному самоуправлению в эпоху реформ Александра III."},
+            {title:"Торжественное заседание Государственного Совета", year:1901, desc:"Официальная сцена собрания высшего советского органа, отражающая политическую атмосферу конца XIX — начала XX вв."},
+            {title:"17 октября 1905 года", year:1905, desc:"Живописное изображение событий первой русской революции, когда рабочие и крестьяне вышли на улицы в знак протеста."}
+        ];
+
+        function updateInfo(index){
+            const info = paintingsInfo[index];
+            const html = `
+                <h3>${info.title}</h3>
+                <p><strong>Год:</strong> ${info.year}</p>
+                <p>${info.desc}</p>
+            `;
+            document.getElementById('info-card').innerHTML = html;
+        }
+
+        /* ---- Слайдер галереи ---- */
+        (() => {
+            const slides   = document.querySelectorAll('.slide');
+            const wrapper  = document.querySelector('.slides');
+            const leftBtn  = document.querySelector('.arrow-left');
+            const rightBtn = document.querySelector('.arrow-right');
+            const curEl    = document.getElementById('cur');
+            const totEl    = document.getElementById('tot');
+
+            const total = slides.length;
+            let current = 0;
+            totEl.textContent = total;
+
+            const update = () => {
+                wrapper.style.transform = `translateX(-${current * 100}%)`;
+                curEl.textContent = current + 1;
+                updateInfo(current);
+            };
+
+            leftBtn.addEventListener('click', () => {
+                current = (current - 1 + total) % total;
+                update();
+            });
+            rightBtn.addEventListener('click', () => {
+                current = (current + 1) % total;
+                update();
+            });
+
+            /* свайпы для мобильных */
+            let startX = 0;
+            wrapper.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
+            wrapper.addEventListener('touchend', e => {
+                const diff = e.changedTouches[0].clientX - startX;
+                if (diff > 50) {
+                    current = (current - 1 + total) % total;
+                } else if (diff < -50) {
+                    current = (current + 1) % total;
+                }
+                update();
+            });
+
+            /* клавиши ← / → */
+            document.addEventListener('keydown', e => {
+                if (e.key === 'ArrowLeft') leftBtn.click();
+                if (e.key === 'ArrowRight') rightBtn.click();
+            });
+
+            // первая инициализация
+            update();
+        })();
+    </script>
+</body>
+</html>
