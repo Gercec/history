@@ -11,18 +11,16 @@
     <style>
         /* ────── ПАЛИТРА И ПЕРЕМЕННЫЕ ────── */
         :root{
-            /* базовые цвета */
-            --bg:            #f5f9f6;      /* фон страницы */
-            --card-bg:       #ffffff;      /* фон карточек */
-            --text:          #212121;      /* основной текст */
-            --muted:         #6c757d;      /* вспомогательный текст */
-            --primary:       #00897b;      /* основной акцент (зелёный‑тёмный) */
-            --primary-light:#33b6a4;      /* более светлый акцент */
+            --bg:            #f5f9f6;
+            --card-bg:       #ffffff;
+            --text:          #212121;
+            --muted:         #6c757d;
+            --primary:       #00897b;
+            --primary-light:#33b6a4;
             --radius:        10px;
             --shadow:        0 4px 12px rgba(0,0,0,.07);
             --shadow-md:     0 8px 24px rgba(0,0,0,.1);
             --trans:         .25s ease;
-            /* фоновые градиенты для «хаотичных» секций */
             --section-bg-1:  linear-gradient(135deg,#e8f5e9 0%,#fff 80%);
             --section-bg-2:  linear-gradient(135deg,#e0f2f1 0%,#fff 80%);
         }
@@ -50,16 +48,16 @@
         a{color:inherit;text-decoration:none;transition:color var(--trans);}
         a:hover{color:var(--primary);}
         img{max-width:100%;display:block;pointer-events:none;}
-
         button{cursor:pointer;border:none;background:none;font:inherit;}
 
         /* ────── ШАПКА ────── */
         header{
             position:sticky;top:0;z-index:1000;
-            background:rgba(255,255,255,.9);
+            background:rgba(255,255,255,.95);
             backdrop-filter:blur(8px);
             box-shadow:var(--shadow);
             transition:background var(--trans),box-shadow var(--trans);
+            padding:0.6rem 1rem;               /* <‑‑ Укорочено */
         }
         header.scrolled{
             background:var(--card-bg);
@@ -69,38 +67,66 @@
             max-width:1240px;
             margin:0 auto;
             display:flex;justify-content:space-between;align-items:center;
-            padding:0.9rem 1.5rem;
         }
         .logo{
             font-weight:600;
-            font-size:1.4rem;
+            font-size:1.2rem;                    /* <‑‑ Уменьшено */
             color:var(--primary);
         }
         nav ul{
             list-style:none;
             display:flex;
-            gap:1.8rem;
+            gap:1.4rem;
             font-weight:500;
         }
         nav a:hover{color:var(--primary-light);}
+        .menu-toggle{
+            display:none;                         /* будет видно только на мобильных */
+            font-size:1.8rem;
+            color:var(--primary);
+        }
         .dark-toggle{
             font-size:1.4rem;
             color:var(--primary);
         }
 
+        /* ────── ОТКРЫТОЕ МЕНЮ ДЛЯ МОБИЛЬНЫХ ────── */
+        .mobile-nav{
+            position:fixed;
+            inset:0;
+            background:rgba(255,255,255,.97);
+            backdrop-filter:blur(6px);
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            gap:2rem;
+            font-size:1.4rem;
+            z-index:999;
+            opacity:0;
+            pointer-events:none;
+            transition:opacity .3s ease;
+        }
+        .mobile-nav.show{
+            opacity:1;
+            pointer-events:auto;
+        }
+        .mobile-nav a{color:var(--primary);}
+        .mobile-nav a:hover{color:var(--primary-light);}
+
         /* ────── HERO ────── */
         .hero{
             background:var(--section-bg-1);
-            padding:4rem 1.5rem 3rem;
+            padding:3rem 1.5rem 2.5rem;          /* чуть меньше на мобильных */
             text-align:center;
         }
         .hero h1{
-            font-size:2.8rem;
+            font-size:2.6rem;
             margin-bottom:.6rem;
             color:var(--primary);
         }
         .hero p{
-            font-size:1.1rem;
+            font-size:1.05rem;
             max-width:740px;
             margin:0 auto;
             color:var(--muted);
@@ -112,7 +138,6 @@
             margin:3rem auto;
             position:relative;
         }
-        /* фон‑схема, слегка наклонённая – создаёт «хаос» */
         .section::before{
             content:"";
             position:absolute;
@@ -122,10 +147,12 @@
             transform-origin:top left;
             z-index:-1;
         }
-        /* чётные секции используют иной градиент */
-        .section:nth-child(even)::before{background:var(--section-bg-1);transform:skewY(3deg);}
+        .section:nth-child(even)::before{
+            background:var(--section-bg-1);
+            transform:skewY(3deg);
+        }
         .section-content{
-            background:transparent;                     /* чтобы карточки оставались белыми */
+            background:transparent;
             padding:2rem 2rem;
         }
         .section-title{
@@ -191,12 +218,6 @@
         .media:nth-child(odd) img{transform:rotate(-1deg);}
         .media:nth-child(even) img{transform:rotate(1deg);}
         .media .text{flex:1;}
-        @media (max-width:768px){
-            .hero h1{font-size:2.2rem;}
-            .hero p{font-size:1rem;}
-            .media{flex-direction:column;text-align:center;}
-            .media img{max-height:none;width:80%;max-width:300px;margin:0 auto 1rem;}
-        }
 
         /* ────── СЕТКА ГЕРОБОВ ────── */
         .coat-grid{
@@ -216,7 +237,7 @@
         .coat-grid img:hover{transform:scale(1.06) rotate(2deg);}
         @media (max-width:600px){.coat-grid img{height:80px;}}
 
-        /* ────── ФУТЕР ────── */
+        /* ────── ПОДВАЛ ────── */
         footer{
             background:var(--card-bg);
             color:var(--muted);
@@ -230,6 +251,29 @@
             margin:1rem auto 0;
             max-width:180px;
         }
+
+        /* ────── АДАПТИВНОСТЬ ────── */
+        @media (max-width:768px){
+            header{
+                padding:0.5rem 0.8rem;
+            }
+            .logo{font-size:1.1rem;}
+            nav{display:none;}
+            .menu-toggle{display:flex;}
+            .hero{padding:2.5rem 1rem 2rem;}
+            .hero h1{font-size:2.2rem;}
+            .hero p{font-size:0.95rem;}
+            .media{
+                flex-direction:column;
+                text-align:center;
+            }
+            .media img{
+                max-height:none;
+                width:80%;
+                max-width:300px;
+                margin:0 auto 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -238,6 +282,8 @@
     <header id="header">
         <div class="header-inner">
             <div class="logo">Russia — World</div>
+
+            <!-- Обычное горизонтальное меню (показывается только на ПК) -->
             <nav>
                 <ul>
                     <li><a href="#world">Мир к началу XX в.</a></li>
@@ -248,8 +294,24 @@
                     <li><a href="#lifestyle">Образ жизни</a></li>
                 </ul>
             </nav>
+
+            <!-- Темная/светлая тема -->
             <button class="dark-toggle" id="darkToggle" title="Тёмный/Светлый режим">🌙</button>
+
+            <!-- Гамбургер‑кнопка (видна только на мобильных) -->
+            <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">☰</button>
         </div>
+
+        <!-- Мобильное меню (оверлей) -->
+        <nav class="mobile-nav" id="mobileNav">
+            <a href="#world"     onclick="toggleMobileMenu()">Мир к началу XX в.</a>
+            <a href="#territory" onclick="toggleMobileMenu()">Территория и население</a>
+            <a href="#modernisation" onclick="toggleMobileMenu()">Модернизация</a>
+            <a href="#politics" onclick="toggleMobileMenu()">Политический строй</a>
+            <a href="#social" onclick="toggleMobileMenu()">Социальная структура</a>
+            <a href="#lifestyle" onclick="toggleMobileMenu()">Образ жизни</a>
+            <button class="dark-toggle" id="darkToggleMobile" title="Тёмный/Светлый режим">🌙</button>
+        </nav>
     </header>
 
     <!-- ────── HERO ────── -->
@@ -539,17 +601,16 @@
 
     <!-- ────── ФУТЕР ────── -->
     <footer>
-        <img src="img/hrum.gif" alt="Храм Руси">
-        <p><b>hrum</b></p>
+        <img src="img/hrum.gif" alt="Графика внизу страницы">
     </footer>
 
     <!-- ────── СКРИПТЫ ────── -->
     <script>
-        // ------------ Появление блоков при скролле ------------
+        /* -------- Появление элементов при скролле -------- */
         const fadeEls = document.querySelectorAll('.fade');
         const appearObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting){
+                if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     observer.unobserve(entry.target);
                 }
@@ -557,20 +618,35 @@
         }, {threshold:0.15});
         fadeEls.forEach(el => appearObserver.observe(el));
 
-        // ------------ Меняем стиль шапки при прокрутке ------------
+        /* -------- Смена стиля шапки при прокрутке -------- */
         const header = document.getElementById('header');
         window.addEventListener('scroll', () => {
             header.classList.toggle('scrolled', window.scrollY > 80);
         });
 
-        // ------------ Переключатель светлой/тёмной темы ------------
-        const toggleBtn = document.getElementById('darkToggle');
+        /* -------- Тёмный/светлый режим -------- */
+        const darkToggle     = document.getElementById('darkToggle');
+        const darkToggleMob  = document.getElementById('darkToggleMobile');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         if (prefersDark) document.body.classList.add('dark');
 
-        toggleBtn.addEventListener('click', () => {
+        function toggleTheme(){
             document.body.classList.toggle('dark');
-            toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+        }
+        darkToggle.addEventListener('click', toggleTheme);
+        darkToggleMob.addEventListener('click', toggleTheme);
+
+        /* -------- Мобильное меню (гамбургер) -------- */
+        const menuBtn  = document.getElementById('menuToggle');
+        const mobileNav = document.getElementById('mobileNav');
+
+        function toggleMobileMenu(){
+            mobileNav.classList.toggle('show');
+        }
+        menuBtn.addEventListener('click', toggleMobileMenu);
+        // закрыть меню при клике на любую ссылку внутри него
+        mobileNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', toggleMobileMenu);
         });
     </script>
 </body>
